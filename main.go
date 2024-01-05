@@ -1,11 +1,13 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
+
+const englishHelloPrefix = "Hello, "
 
 func Hello(s string) string {
-	const englishHelloPrefix = "Hello, "
+	if s == "" {
+		s = "World"
+	}
 	return englishHelloPrefix + s
 }
 
