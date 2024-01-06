@@ -79,6 +79,46 @@ func TestString(t *testing.T) {
 		}
 	})
 
+	t.Run("Testing Join", func(t *testing.T) {
+		elems := []string{"This", "Is", "My", "Test"}
+		got := strings.Join(elems, ", ")
+		want := "This, Is, My, Test"
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
+
+	t.Run("Testing Repeat", func(t *testing.T) {
+		got := strings.Repeat("david", 3)
+		want := "daviddaviddavid"
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
+
+	t.Run("Testing Replace", func(t *testing.T) {
+		got := strings.Replace("me me me", "me", "david", -1)
+		want := "david david david"
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
+
+	t.Run("Testing Trim", func(t *testing.T) {
+		got := strings.Trim("WWW.keme.com", "Wcom.")
+		want := "keme"
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
+
+	t.Run("Testing TrimSpace", func(t *testing.T) {
+		got := strings.TrimSpace("   This is not a test   ")
+		want := "This is not a test"
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
 }
 
 func assertCorrectMessage(t testing.TB, got, want int) {
