@@ -1,4 +1,4 @@
-package countdown
+package Countdown
 
 import (
 	"fmt"
@@ -6,8 +6,12 @@ import (
 	"time"
 )
 
-const finalWord = "Go!"
-const countdownStart = 3
+const (
+	write          = "write"
+	sleep          = "sleep"
+	finalWord      = "Go!"
+	countdownStart = 3
+)
 
 type Sleeper interface {
 	Sleep()
@@ -25,6 +29,36 @@ type DefaultSleeper struct{}
 
 func (d *DefaultSleeper) Sleep() {
 	time.Sleep(1 * time.Second)
+}
+
+type SpyCountdownOperations struct {
+	Calls []string
+}
+
+func (s *SpyCountdownOperations) Sleep() {
+	s.Calls = append(s.Calls, sleep)
+}
+
+func (s *SpyCountdownOperations) Write(p []byte) (n int, err error) {
+	s.Calls = append(s.Calls, write)
+	return
+}
+
+type ConfigurableSleeper struct {
+	Duration time.Duration
+	Sleepy    func(time.Duration)
+}
+
+type SpyTime struct {
+	durationSlept time.Duration
+}
+
+func (c ConfigurableSleeper) Sleep() {
+
+}
+
+func (s *SpyTime) Sleep(duration time.Duration) {
+	s.durationSlept = duration
 }
 
 func Countdown(w io.Writer, sleeper Sleeper) {

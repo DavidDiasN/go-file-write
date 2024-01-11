@@ -1,4 +1,4 @@
-package maps
+package Maps
 
 const (
 	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
