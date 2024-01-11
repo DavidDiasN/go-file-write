@@ -1,13 +1,24 @@
 package concurrency
 
 type WebsiteChecker func(string) bool
+type result struct {
+	string
+	bool
+}
 
 func Checkwebsites(wc WebsiteChecker, urls []string) map[string]bool {
 	results := make(map[string]bool)
+	resultChannel := make(chan result)
 
 	for _, url := range urls {
-		results[url] = wc(url)
+		go func(u string) {
+			resultChannel <- result{u, wc(u)}
+		}(url)
 	}
-	 return results
-}
 
+	for i := 0; i < len(urls); i++ {
+		r := <-resultChannel
+		results[r.string] = r.bool
+	}
+	return results
+}

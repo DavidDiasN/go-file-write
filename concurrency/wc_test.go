@@ -1,42 +1,42 @@
 package concurrency
 
 import (
-	"fmt"
+	"reflect"
 	"testing"
 	"time"
 )
 
-// func mockWebsiteChecker(url string) bool {
-// 	if url == "waat://furhurterwe.geds" {
-// 		return false
-// 	}
-// 	return true
-// }
+func mockWebsiteChecker(url string) bool {
+	if url == "waat://furhurterwe.geds" {
+		return false
+	}
+	return true
+}
 
-// func TestCheckWebsites(t *testing.T) {
-// 	websites := []string{
-// 		"http://google.com",
-// 		"http://blog.gypsydave5.com",
-// 		"waat://furhurterwe.geds",
-// 	}
+func TestCheckWebsites(t *testing.T) {
 
-// 	want := map[string]bool{
+	websites := []string{
+		"http://google.com",
+		"http://blog.gypsydave5.com",
+		"waat://furhurterwe.geds",
+	}
 
-// 		"http://google.com":          true,
-// 		"http://blog.gypsydave5.com": true,
-// 		"waat://furhurterwe.geds":    false,
-// 	}
+	want := map[string]bool{
 
-// 	got := Checkwebsites(mockWebsiteChecker, websites)
+		"http://google.com":          true,
+		"http://blog.gypsydave5.com": true,
+		"waat://furhurterwe.geds":    false,
+	}
 
-// 	if !reflect.DeepEqual(want, got) {
-// 		t.Fatalf("wanted %v, got %v", want, got)
-// 	}
-// }
+	got := Checkwebsites(mockWebsiteChecker, websites)
+
+	if !reflect.DeepEqual(want, got) {
+		t.Fatalf("wanted %v, got %v", want, got)
+	}
+}
 
 func slowStubWebsiteChecker(_ string) bool {
-	time.Sleep(200 * time.Millisecond)
-	fmt.Println("we are here")
+	time.Sleep(20 * time.Millisecond)
 	return true
 }
 
