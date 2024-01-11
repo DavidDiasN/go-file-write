@@ -1,12 +1,13 @@
-package main
+// package main
 
-import (
-	Countdown "main/mocking"
-	"os"
-	"time"
-)
+// import (
+// 	Countdown "main/mocking"
+// 	"os"
+// 	"time"
+// )
 
-func main() {
-	sleeper := &Countdown.ConfigurableSleeper{1 * time.Second, time.Sleep}
-	Countdown.Countdown(os.Stdout, sleeper)
-}
+// func main() {
+// 	sleeper := &Countdown.ConfigurableSleeper{1 * time.Second, time.Sleep}
+// 	Countdown.Countdown(os.Stdout, sleeper)
+// }
+
