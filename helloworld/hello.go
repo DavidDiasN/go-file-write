@@ -4,7 +4,7 @@ const (
 	englishHelloPrefix    = "Hello, "
 	spanishHelloPrefix    = "Hola, "
 	frenchHelloPrefix     = "Bonjour, "
-	portugueseHelloPrefix = "Oui, "
+	portugueseHelloPrefix = "Oi, "
 )
 
 func Hello(name string, lang string) string {
