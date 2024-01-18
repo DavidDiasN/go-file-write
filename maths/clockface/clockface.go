@@ -11,6 +11,7 @@ const (
 	secondHandLength = 90
 	clockCentreX     = 150
 	clockCentreY     = 150
+	minuteHandLength = 80
 )
 
 type Point struct {
@@ -18,12 +19,27 @@ type Point struct {
 	Y float64
 }
 
-func SecondHandPoint(t time.Time) Point {
-	angle := SecondsInRadians(t)
+func angleToPoint(angle float64) Point {
 	x := math.Sin(angle)
 	y := math.Cos(angle)
 
 	return Point{x, y}
+}
+
+func MinuteHandPoint(t time.Time) Point {
+	return angleToPoint(MinutesInRadians(t))
+}
+
+func SecondHandPoint(t time.Time) Point {
+	return angleToPoint(SecondsInRadians(t))
+}
+
+func MinuteHand(w io.Writer, t time.Time) {
+	p := MinuteHandPoint(t)
+	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength}
+	p = Point{p.X, -p.Y}
+	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 func SecondHand(w io.Writer, t time.Time) {
@@ -38,6 +54,10 @@ func SecondsInRadians(t time.Time) float64 {
 	return (math.Pi / (30 / (float64(t.Second()))))
 }
 
+func MinutesInRadians(t time.Time) float64 {
+	return (SecondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+}
+
 func SimpleTime(hours, minutes, seconds int) time.Time {
 	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
 }
@@ -50,6 +70,7 @@ func SVGWriter(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	SecondHand(w, t)
+	MinuteHand(w, t)
 	io.WriteString(w, svgEnd)
 }
 
