@@ -35,19 +35,19 @@ func SecondHandPoint(t time.Time) Point {
 }
 
 func MinuteHand(w io.Writer, t time.Time) {
-	p := MinuteHandPoint(t)
-	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength}
-	p = Point{p.X, -p.Y}
-	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
+	p := makeHand(SecondHandPoint(t), secondHandLength)
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 func SecondHand(w io.Writer, t time.Time) {
-	p := SecondHandPoint(t)
-	p = Point{p.X * secondHandLength, p.Y * secondHandLength}
-	p = Point{p.X, -p.Y}
-	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
+	p := makeHand(MinuteHandPoint(t), minuteHandLength)
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
+}
+
+func makeHand(p Point, length float64) Point {
+	p = Point{p.X * length, p.Y * length}
+	p = Point{p.X, -p.Y}
+	return Point{p.X + clockCentreX, p.Y + clockCentreY}
 }
 
 func SecondsInRadians(t time.Time) float64 {
@@ -56,6 +56,10 @@ func SecondsInRadians(t time.Time) float64 {
 
 func MinutesInRadians(t time.Time) float64 {
 	return (SecondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+}
+
+func HoursInRadians(t time.Time) float64 {
+	return (MinutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
 }
 
 func SimpleTime(hours, minutes, seconds int) time.Time {
