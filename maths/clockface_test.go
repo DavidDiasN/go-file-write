@@ -3,6 +3,7 @@ package clockface_test
 import (
 	"main/maths/clockface"
 	"math"
+	"strings"
 	"testing"
 	"time"
 )
@@ -28,6 +29,14 @@ func TestSecondHandAtMidnight(t *testing.T) {
 
 func TestSecondHandAt30Seconds(t *testing.T) {
 
+	tm := time.Date(1337, time.January, 1, 0, 0, 30, 0, time.UTC)
+
+	want := clockface.Point{X: 150, Y: 150 + 90}
+	got := clockface.SecondHand(tm)
+
+	if got != want {
+		t.Errorf("Got %v, wanted %v", got, want)
+	}
 }
 
 func roughlyEqualFloat64(a, b float64) bool {
@@ -38,3 +47,18 @@ func roughlyEqualFloat64(a, b float64) bool {
 func roughlyEqualPoint(a, b clockface.Point) bool {
 	return roughlyEqualFloat64(a.X, b.X) && roughlyEqualFloat64(a.Y, b.Y)
 }
+
+func TestSVGWriterAtMidnight(t *testing.T) {
+	tm := time.Date(1336, time.January, 1, 0, 0, 0, 0, time.UTC)
+
+	var b strings.Builder
+	clockface.SVGWriter(&b, tm)
+	got := b.String()
+
+	want := `<line x0="150" y1="150" x2="150" y2="60"`
+
+	if !strings.Contains(got, want) {
+		t.Errorf("Expected to find the second hand %v, in the SVG output %v", want, got)
+	}
+}
+
